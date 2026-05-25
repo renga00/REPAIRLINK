@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RedDropConnect - Blood Consumer Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background-color: #c62828;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .request-form, .donor-results {
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .request-form form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .request-form label {
+      margin-top: 10px;
+    }
+
+    .request-form input,
+    .request-form select {
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #b71c1c;
+    }
+
+    .donor-card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #fff0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .donor-card .details {
+      flex: 1;
+    }
+
+    .call-btn {
+      background-color: #43a047;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .call-btn:hover {
+      background-color: #2e7d32;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #eee;
+      margin-top: 40px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Styles from consumer-request.html */
+    .consumer-request-header {
+      background: #a30000;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #000;
+    }
+
+    .container {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .donor-info {
+      margin-bottom: 30px;
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(163, 0, 0, 0.05);
+    }
+
+    .donor-info h4 {
+      margin-bottom: 10px;
+      color: #a30000;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #ffcccc;
+      padding-bottom: 5px;
+    }
+
+    .donor-info p {
+      margin: 8px 0;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .btn-box {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      padding: 30px;
+      width: 250px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(163, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-box:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-box img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+
+    .btn-box h3 {
+      font-size: 1.2rem;
+      color: #a30000;
+    }
+
+    .consumer-footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 10px;
+      color: #a30000;
+      background: #fff0f0;
+      border-top: 1px solid #ffcccc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Blood Consumer Portal</h1>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="donor.html">Donate</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="request-form">
+      <h2>Blood Request Form</h2>
+      <form id="bloodRequestForm">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" required>
+
+        <label for="bloodGroup">Blood Group:</label>
+        <select id="bloodGroup" required>
+          <option value="">Select</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+
+        <label for="contact">Phone Number:</label>
+        <input type="tel" id="contact" required>
+
+        <label for="location">City/Location:</label>
+        <input type="text" id="location" required>
+
+        <button type="submit">Submit Request</button>
+      </form>
+    </section>
+
+    <section class="donor-results hidden" id="donorResults">
+      <h2>Matching Donors</h2>
+      <div id="donorList"></div>
+    </section>
+
+    <section class="hidden" id="consumerRequestPage">
+      <div class="consumer-request-header">RedDropConnect - Consumer Request</div>
+      <div class="container">
+        <div class="title">Selected Donor Details</div>
+
+        <div class="donor-info" id="donorInfo"></div>
+
+        <div class="title">Manage Donor Requests</div>
+        <div class="button-group">
+          <div class="btn-box" onclick="handleAccepted()">
+            <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Accepted Icon" />
+            <h3>Donor Accepted</h3>
+          </div>
+          <div class="btn-box" onclick="handleRejected()">
+            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Rejected Icon" />
+            <h3>Donor Rejected</h3>
+          </div>
+        </div>
+      </div>
+      <footer class="consumer-footer">&copy; 2025 RedDropConnect | All rights reserved</footer>
+    </section>
+  </main>
+
+  <footer>&copy; 2025 RedDropConnect.</footer>
+
+<script>
+  const form = document.getElementById('bloodRequestForm');
+  const donorResults = document.getElementById('donorResults');
+  const donorList = document.getElementById('donorList');
+  const consumerRequestPage = document.getElementById('consumerRequestPage');
+  const infoContainer = document.getElementById('donorInfo');
+
+  // Store selected donor ID globally (for backend API call)
+  let selectedDonorId = null;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const consumerData = {
+      fullName: document.getElementById('fullName').value,
+      bloodGroup: document.getElementById('bloodGroup').value,
+      phoneNumber: document.getElementById('contact').value,
+      location: document.getElementById('location').value
+    };
+
+    fetch("http://localhost:8080/api/consumers/request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(consumerData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then(donors => {
+      donorList.innerHTML = '';
+
+      if (donors.length === 0) {
+        donorList.innerHTML = '<p>No matching donors found.</p>';
+      } else {
+        donors.forEach(donor => {
+  if (donor.status === "Active") { // ✅ Only show Active donors
+    const card = document.createElement('div');
+    card.className = 'donor-card';
+    card.innerHTML = `
+      <div class="details">
+        <strong>${donor.name}</strong><br>
+        Blood Group: ${donor.bloodgroup}<br>
+        Location: ${donor.location}<br>
+      </div>
+      <button class="call-btn" onclick="showConsumerRequestPage(
+        '${encodeURIComponent(donor.name)}',
+        '${encodeURIComponent(donor.bloodgroup)}',
+        '${encodeURIComponent(donor.location)}',
+        '${encodeURIComponent(donor.phonenumber)}',
+        ${donor.id}
+      )">📞 Call</button>
+    `;
+    donorList.appendChild(card);
+  }
+});
+      }
+
+      donorResults.classList.remove('hidden');
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("❌ Failed to fetch donors. Please try again.");
+    });
+  });
+
+  function showConsumerRequestPage(name, bloodgroup, location, phone, donorId) {
+    const decodedName = decodeURIComponent(name);
+    const decodedGroup = decodeURIComponent(bloodgroup);
+    const decodedLocation = decodeURIComponent(location);
+    const decodedPhone = decodeURIComponent(phone);
+
+    // Store the donor ID for later use
+    selectedDonorId = donorId;
+
+    infoContainer.innerHTML = `
+      <h4>Donor Information</h4>
+      <p><strong>Name:</strong> ${decodedName}</p>
+      <p><strong>Blood Group:</strong> ${decodedGroup}</p>
+      <p><strong>Location:</strong> ${decodedLocation}</p>
+      <p><strong>Phone Number:</strong> ${decodedPhone}</p>
+    `;
+    donorResults.classList.add('hidden');
+    form.parentElement.classList.add('hidden');
+    consumerRequestPage.classList.remove('hidden');
+  }
+
+  // ✅ Update backend donation date & block donor
+  function handleAccepted() {
+    if (selectedDonorId) {
+      fetch(`http://localhost:8080/api/admin/update-donation-date/${selectedDonorId}`, {
+        method: "PUT"
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("✅ Donor request marked as Accepted. Donor has been blocked for 3 months.");
+        } else {
+          alert("❌ Failed to update donor status.");
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("❌ Error while updating donor.");
+      });
+    } else {
+      alert("⚠️ No donor selected.");
+    }
+  }
+
+  function handleRejected() {
+  alert("❌ Donor request marked as Rejected.");
+  // Go back to the consumer request form
+  consumerRequestPage.classList.add('hidden');
+  form.parentElement.classList.remove('hidden');
+}
+
+</script>
+
+</body>
+</html>

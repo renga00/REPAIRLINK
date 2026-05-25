@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Donate Blood - RedDropConnect</title>
+  <style>
+    /* Your existing styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #fff5f5;
+      color: #a30000;
+    }
+
+    header {
+      background: #a30000;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(163, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #a30000;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #a30000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #800000;
+    }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 15px;
+      background: #fff0f0;
+      color: #a30000;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>Donate Blood - RedDropConnect</header>
+
+  <div class="container">
+    <h2>Donor Blood Donation Form</h2>
+    <form id="donationForm" enctype="multipart/form-data" onsubmit="return handleDonation(event)">
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" min="18" max="65" required />
+      </div>
+
+      <div class="form-group">
+        <label for="bloodgroup">Blood Group</label>
+        <select id="bloodgroup" name="bloodgroup" required>
+          <option value="">-- Select --</option>
+          <option>A+</option>
+          <option>B+</option>
+          <option>O+</option>
+          <option>AB+</option>
+          <option>A-</option>
+          <option>B-</option>
+          <option>O-</option>
+          <option>AB-</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phonenumber" pattern="[0-9]{10}" required />
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" required />
+      </div>
+
+      <div class="form-group">
+        <label for="document">Upload Document (PDF, JPG, etc.)</label>
+        <input type="file" id="document" name="document" accept=".pdf,.jpg,.jpeg,.png" required />
+      </div>
+
+      <button type="submit">Submit Donation</button>
+      <div class="success-message" id="successMsg">✔ Donation submitted successfully!</div>
+    </form>
+  </div>
+
+  <footer>&copy; 2025 RedDropConnect | Thank you for donating!</footer>
+
+  <script>
+    function handleDonation(event) {
+      event.preventDefault();
+
+      const form = document.getElementById('donationForm');
+      const formData = new FormData(form); // ✅ Create FormData object
+
+      fetch("http://localhost:8080/api/donors", {
+        method: "POST",
+        body: formData // ✅ Send multipart/form-data
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('successMsg').style.display = 'block';
+          form.reset();
+        } else {
+          alert("❌ Error submitting form. Check backend logs for details.");
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("⚠️ Failed to connect to server.");
+      });
+    }
+  </script>
+
+</body>
+</html>

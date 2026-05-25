@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RedDropConnect Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f8f8f8;
+      color: #333;
+    }
+
+    header {
+      background-color: #a30000;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #000;
+    }
+
+    .admin-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .admin-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .admin-btn {
+      background-color: #a30000;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .admin-btn:hover {
+      background-color: #d32f2f;
+    }
+
+    .tab {
+      display: none;
+    }
+
+    .active-tab {
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #a30000;
+    }
+
+    .delete-btn {
+      background-color: #e53935;
+      color: white;
+    }
+
+    .edit-btn {
+      background-color: #43a047;
+      color: white;
+    }
+
+    .refresh-btn {
+      background-color: #a30000;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .blood-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .group-card {
+      background: #fff0f0;
+      padding: 20px;
+      text-align: center;
+      border-radius: 12px;
+      border: 1px solid #ffcccc;
+      box-shadow: 0 4px 12px rgba(163, 0, 0, 0.1);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .group-card:hover {
+      transform: scale(1.05);
+    }
+
+    .group-name {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #a30000;
+    }
+
+    .units {
+      font-size: 1rem;
+      margin-top: 5px;
+    }
+
+    .block-btn {
+      padding: 8px 16px;
+      background: #a30000;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .blocked {
+      background-color: #ffe6e6 !important;
+      color: #a30000;
+    }
+
+    .blocked .block-btn {
+      background: #999 !important;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+
+      th {
+        background: #a30000;
+        color: white;
+      }
+    }
+    #editModal form {
+  display: flex;
+  flex-direction: column;
+}
+
+#editModal form .button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Slightly reduced gap for better alignment */
+  margin-top: 12px; /* Reduced margin for compact look */
+}
+
+#editModal .edit-btn,
+#editModal .delete-btn {
+  flex: 1;
+  padding: 8px 0; /* Reduced button height */
+  border-radius: 6px; /* Softer rounded corners */
+  font-size: 15px; /* Slightly smaller text */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#editModal .edit-btn {
+  background: #4cafef;
+  color: #fff;
+  border: none;
+}
+
+#editModal .edit-btn:hover {
+  background: #3299dd;
+  transform: scale(1.03);
+}
+
+#editModal .delete-btn {
+  background: #f44336;
+  color: #fff;
+  border: none;
+}
+
+#editModal .delete-btn:hover {
+  background: #d32f2f;
+  transform: scale(1.03);
+}
+
+  </style>
+</head>
+<body>
+
+  <header>RedDropConnect Admin Dashboard</header>
+
+  <div class="admin-container">
+    <div class="admin-buttons">
+      <button class="admin-btn" onclick="showTab('manageTab')">👥 Manage Profiles</button>
+      <button class="admin-btn" onclick="showTab('bloodTab')">🩸 Blood Availability</button>
+      <button class="admin-btn" onclick="showTab('donatedTab')">📝 Donated Records</button>
+    </div>
+
+    <!-- Manage Profiles -->
+    <div class="tab active-tab" id="manageTab">
+      <button class="refresh-btn" onclick="fetchDonors()">🔄 Refresh Donor List</button>
+      <h2>Donor Records</h2>
+      <table id="donorTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Blood Group</th>
+            <th>Phone</th>
+            <th>location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Donor data loaded by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Blood Availability -->
+    <div class="tab" id="bloodTab">
+      <h2>Blood Group Availability</h2>
+      <div class="blood-groups">
+        <div class="group-card" data-group="A+"><div class="group-name">A+</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="B+"><div class="group-name">B+</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="O+"><div class="group-name">O+</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="AB+"><div class="group-name">AB+</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="A-"><div class="group-name">A-</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="B-"><div class="group-name">B-</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="O-"><div class="group-name">O-</div><div class="units">Loading...</div></div>
+        <div class="group-card" data-group="AB-"><div class="group-name">AB-</div><div class="units">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- Donated Records -->
+    <div class="tab" id="donatedTab">
+      <h2>Donated Records</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Donor ID</th>
+            <th>Name</th>
+            <th>Blood Group</th>
+            <th>Donation Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="donatedTable">
+          <tr>
+            <td>#D001</td>
+            <td>Ravi Kumar</td>
+            <td>B+</td>
+            <td>2025-07-01</td>
+            <td>Active</td>
+            <td><button class="block-btn" onclick="blockDonor(this)">Block</button></td>
+          </tr>
+          <tr>
+            <td>#D002</td>
+            <td>Anita Sharma</td>
+            <td>O+</td>
+            <td>2025-06-20</td>
+            <td>Active</td>
+            <td><button class="block-btn" onclick="blockDonor(this)">Block</button></td>
+          </tr>
+          <tr>
+            <td>#D003</td>
+            <td>Mohit Verma</td>
+            <td>AB-</td>
+            <td>2025-05-30</td>
+            <td>Active</td>
+            <td><button class="block-btn" onclick="blockDonor(this)">Block</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div style="background:#fff; padding:20px; max-width:400px; margin:100px auto; border-radius:8px; position:relative;">
+    
+    <h2>Edit Donor</h2>
+    <form id="editForm">
+      <input type="hidden" id="editId">
+      <label>Name:</label>
+      <input type="text" id="editName" required><br><br>
+      <label>Blood Group:</label>
+      <input type="text" id="editBloodGroup" required><br><br>
+      <label>Phone Number:</label>
+      <input type="text" id="editPhone" required><br><br>
+      <label>Location:</label>
+      <input type="text" id="editLocation" required><br><br>
+      <button type="submit" class="edit-btn">Update</button>
+      <button type="button" onclick="closeEditModal()" class="delete-btn">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active-tab'));
+    document.getElementById(tabId).classList.add('active-tab');
+  }
+
+ async function fetchDonors() {
+  const tableBody = document.querySelector('#donorTable tbody');
+  tableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+
+  try {
+    const response = await fetch('http://localhost:8080/api/admin/all-donors');
+    if (!response.ok) throw new Error('Failed to fetch donors');
+    const donors = await response.json();
+
+    if (donors.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="5">No donors found</td></tr>';
+    } else {
+      tableBody.innerHTML = donors.map(d => `
+        <tr class="${d.status === 'Blocked' ? 'blocked' : ''}">
+          <td>${d.id}</td>
+          <td>${d.name}</td>
+          <td>${d.bloodgroup}</td>
+          <td>${d.phonenumber}</td>
+          <td>${d.location}</td>
+          <td>
+            <button class="edit-btn" onclick="openEditModal(${d.id}, '${d.name}', '${d.bloodgroup}', '${d.phonenumber}', '${d.location || ''}')">Edit</button>
+            <button class="delete-btn" onclick="deleteDonor(${d.id})">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  } catch (error) {
+    console.error('Error fetching donors:', error);
+    tableBody.innerHTML = '<tr><td colspan="5">Error loading donors</td></tr>';
+  }
+}
+
+function openEditModal(id, name, bloodgroup, phone, location) {
+  document.getElementById('editId').value = id;
+  document.getElementById('editName').value = name;
+  document.getElementById('editBloodGroup').value = bloodgroup;
+  document.getElementById('editPhone').value = phone;
+  document.getElementById('editLocation').value = location || ''; // handle null values
+  document.getElementById('editModal').style.display = 'block';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+document.getElementById('editForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const id = document.getElementById('editId').value;
+  const name = document.getElementById('editName').value;
+  const bloodgroup = document.getElementById('editBloodGroup').value;
+  const phonenumber = document.getElementById('editPhone').value;
+  const location = document.getElementById('editLocation').value;
+
+  try {
+    const response = await fetch(`http://localhost:8080/api/admin/update-donor/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, bloodgroup, phonenumber, location })
+    });
+    if (response.ok) {
+      alert("✅ Donor updated successfully.");
+      closeEditModal();
+      fetchDonors();
+    } else {
+      alert("❌ Failed to update donor.");
+    }
+  } catch (error) {
+    console.error('Error updating donor:', error);
+    alert("❌ Error updating donor.");
+  }
+});
+
+  // ✅ Fetch donors for Donated Records tab (with block ability)
+  async function fetchDonatedRecords() {
+    const tableBody = document.getElementById('donatedTable');
+    tableBody.innerHTML = '<tr><td colspan="6">Loading...</td></tr>';
+
+    try {
+     const response = await fetch('http://localhost:8080/api/admin/all-donors');
+      if (!response.ok) throw new Error('Failed to fetch donated records');
+      const donors = await response.json();
+
+      if (donors.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6">No donation records found</td></tr>';
+      } else {
+        tableBody.innerHTML = donors.map(d => `
+          <tr class="${d.status === 'Blocked' ? 'blocked' : ''}">
+            <td>#D${String(d.id).padStart(3, '0')}</td>
+            <td>${d.name}</td>
+            <td>${d.bloodgroup}</td>
+            <td>${d.lastDonationDate || 'N/A'}</td>
+            <td>${d.status}</td>
+            <td>
+              ${d.status === 'Blocked'
+                ? `<span>⛔ Blocked until ${d.blockUntil}</span>`
+                : `<button class="block-btn" onclick="blockDonor(${d.id})">Block for 3 months</button>`
+              }
+            </td>
+          </tr>
+        `).join('');
+      }
+    } catch (error) {
+      console.error('Error fetching donated records:', error);
+      tableBody.innerHTML = '<tr><td colspan="6">Error loading records</td></tr>';
+    }
+  }
+
+  // ✅ Block donor for 3 months
+  async function blockDonor(id) {
+    if (confirm("⚠️ Block this donor for 3 months?")) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/admin/block-donor/${id}`, {
+          method: "PUT"
+        });
+        if (response.ok) {
+          alert("✅ Donor blocked for 3 months.");
+          fetchDonatedRecords(); // Refresh only Donated Records tab
+        } else {
+          alert("❌ Failed to block donor.");
+        }
+      } catch (error) {
+        console.error('Error blocking donor:', error);
+        alert("❌ Server error while blocking donor.");
+      }
+    }
+  }
+
+  // ✅ Delete donor
+  async function deleteDonor(id) {
+    if (confirm("⚠️ Are you sure you want to delete this donor?")) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/admin/delete-donor/${id}`, {
+          method: "DELETE"
+        });
+        if (response.ok) {
+          alert("✅ Donor deleted successfully.");
+          fetchDonors(); // Refresh Manage Profiles tab
+        } else {
+          alert("❌ Failed to delete donor.");
+        }
+      } catch (error) {
+        console.error('Error deleting donor:', error);
+        alert("❌ Error deleting donor.");
+      }
+    }
+  }
+
+  // ✅ Edit donor
+  async function editDonor(id, currentName, currentGroup, currentPhone) {
+    const name = prompt("Enter new name:", currentName);
+    const bloodgroup = prompt("Enter new blood group:", currentGroup);
+    const phonenumber = prompt("Enter new phone number:", currentPhone);
+
+    if (name && bloodgroup && phonenumber) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/admin/update-donor/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, bloodgroup, phonenumber })
+        });
+        if (response.ok) {
+          alert("✅ Donor updated successfully.");
+          fetchDonors();
+        } else {
+          alert("❌ Failed to update donor.");
+        }
+      } catch (error) {
+        console.error('Error updating donor:', error);
+        alert("❌ Error updating donor.");
+      }
+    } else {
+      alert("⚠️ Update cancelled. All fields are required.");
+    }
+  }
+
+  // ✅ Fetch blood group counts from backend
+  async function updateBloodAvailability() {
+    try {
+      const response = await fetch('http://localhost:8080/api/admin/active-blood-group-counts');
+      if (!response.ok) throw new Error('Failed to fetch blood group counts');
+      const counts = await response.json();
+
+      document.querySelectorAll('.group-card').forEach(card => {
+        const group = card.dataset.group;
+        const units = counts[group] || 0;
+        card.querySelector('.units').innerText = `${units} Person`;
+      });
+    } catch (error) {
+      console.error('Error fetching blood group counts:', error);
+      document.querySelectorAll('.units').forEach(el => el.innerText = 'Error');
+    }
+  }
+
+  // Load data on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    fetchDonors();           // Load Manage Profiles data
+    fetchDonatedRecords();   // Load Donated Records data
+    updateBloodAvailability();
+  });
+</script>
+
+
+</body>
+</html>

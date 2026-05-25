@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RedDropConnect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    header {
+      background-color: #b71c1c;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .nav-right a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 16px;
+      border-radius: 5px;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-right a:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background-color: #fdecea;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      color: #b71c1c;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #555;
+    }
+
+    .hero button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #b71c1c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .hero button:hover {
+      background-color: #d32f2f;
+    }
+
+    .center-section {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .center-section h2 {
+      font-size: 28px;
+      color: #b71c1c;
+      margin-bottom: 30px;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 250px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .card h3 {
+      color: #b71c1c;
+      margin-bottom: 10px;
+    }
+
+    .card img {
+      max-width: 150px;
+      height: auto;
+      margin-top: 10px;
+    }
+
+    .blood-info {
+      text-align: center;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff4f4;
+      max-width: 700px;
+      border-radius: 10px;
+    }
+
+    .blood-info img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .blood-types button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      background: #b71c1c;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .blood-types button:hover {
+      background: #a00000;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #fdecea;
+      color: #a30000;
+      font-size: 13px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 15px;
+      color: #b71c1c;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal-content button {
+      padding: 10px 20px;
+      background-color: #b71c1c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background-color: #a00000;
+    }
+
+    .close {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .close:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">RedDropConnect</div>
+    <div class="nav-right">
+      <a onclick="openModal()">Admin</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Donate Blood, Save Lives</h1>
+    <p>Make a life-changing impact: Donate blood, save lives.<br>Together, we can heal communities.</p>
+    <button onclick="window.location.href='donor-submission.html'">Become a Donor</button>
+  </section>
+
+  <!-- Donor/Consumer Buttons -->
+  <section class="center-section">
+    <h2>Join as a Participant</h2>
+    <div class="cards">
+      <a href="donor.html" style="text-decoration: none;">
+        <div class="card">
+          <h3>Donor</h3>
+          <img src="image2.jpeg" alt="Donor">
+        </div>
+      </a>
+      <a href="consumer.html" style="text-decoration: none;">
+        <div class="card">
+          <h3>Consumer</h3>
+          <img src="image5.jpeg" alt="Consumer">
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Learn About Donation Section -->
+  <section class="blood-info">
+    <h2>Learn About Donation</h2>
+    <div class="blood-types">
+      <p>Select your Blood Type:</p>
+      <button onclick="selectBloodType('A+')">A+</button>
+      <button onclick="selectBloodType('O+')">O+</button>
+      <button onclick="selectBloodType('B+')">B+</button>
+      <button onclick="selectBloodType('AB+')">AB+</button>
+      <button onclick="selectBloodType('A-')">A-</button>
+      <button onclick="selectBloodType('O-')">O-</button>
+      <button onclick="selectBloodType('B-')">B-</button>
+      <button onclick="selectBloodType('AB-')">AB-</button>
+    </div>
+    <br>
+    <p><strong>You can take from:</strong> <span id="takeFrom">-</span></p>
+    <p><strong>You can give to:</strong> <span id="giveTo">-</span></p>
+    <br>
+    <img src="image4.jpeg" alt="Blood Chart">
+  </section>
+
+  <!-- ADDITION: How Donation Works + Footer Links -->
+  <section style="background-color:#fff4f4; padding: 40px 20px;">
+    <h2 style="text-align:center; color:#b71c1c; margin-bottom: 30px;">How Donation Works?</h2>
+    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; text-align: center;">
+      <div style="background: #ffffff; padding: 20px; border-radius: 8px; width: 250px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4 style="color:#b71c1c; margin-bottom: 10px;">Registration Process</h4>
+        <p>Sign up and schedule your first with ease.</p>
+      </div>
+      <div style="background: #ffffff; padding: 20px; border-radius: 8px; width: 250px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4 style="color:#b71c1c; margin-bottom: 10px;">Health Screening</h4>
+        <p>A simple check-up to ensure you’re ready to donate.</p>
+      </div>
+      <div style="background: #ffffff; padding: 20px; border-radius: 8px; width: 250px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h4 style="color:#b71c1c; margin-bottom: 10px;">Donation Day</h4>
+        <p>Relax as our professional staff guides you through.</p>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 40px; font-size: 14px; color: #a30000;">
+      <div>
+        <h4>Looking for Blood</h4>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>Blood Availability</li>
+          <li>Blood Center Directory</li>
+          <li>Thalassemia Request</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Want to Donate Blood</h4>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>Blood Donation Camp</li>
+          <li>Donor Login</li>
+          <li>About Blood Donation</li>
+          <li>Register VBD Camp</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Blood Center Login</h4>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>e-RedDropConnect</li>
+          <li>Add Your Blood Center</li>
+        </ul>
+      </div>
+      <div>
+        <h4>About Us</h4>
+        <ul style="list-style: none; padding-left: 0;">
+          <li>About RedDropConnect</li>
+          <li>Notifications</li>
+          <li>FAQs</li>
+          <li>Contact Us</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 RedDropConnect
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>Admin Login</h3>
+      <input type="text" id="adminUser" placeholder="Username">
+      <input type="password" id="adminPass" placeholder="Password">
+      <button onclick="login()">Login</button>
+      <p id="loginMsg" style="color:red; font-size: 14px;"></p>
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById('loginModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+
+    async function login() {
+      const username = document.getElementById('adminUser').value;
+      const password = document.getElementById('adminPass').value;
+      const message = document.getElementById('loginMsg');
+
+      if (!username || !password) {
+        message.textContent = 'Please enter both username and password.';
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8080/api/admin/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+          window.location.href = 'admin.html';
+        } else if (response.status === 401) {
+          message.textContent = 'Invalid credentials.';
+        } else {
+          message.textContent = 'Login failed. Please try again.';
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        message.textContent = 'Server not reachable.';
+      }
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('loginModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    const compatibility = {
+      'A+': { give: ['A+', 'AB+'], take: ['O+', 'O-', 'A+', 'A-'] },
+      'O+': { give: ['A+', 'B+', 'O+', 'AB+'], take: ['O+', 'O-'] },
+      'B+': { give: ['B+', 'AB+'], take: ['B+', 'B-', 'O+', 'O-'] },
+      'AB+': { give: ['AB+'], take: ['Everyone'] },
+      'A-': { give: ['A+', 'A-', 'AB+', 'AB-'], take: ['A-', 'O-'] },
+      'O-': { give: ['Everyone'], take: ['O-'] },
+      'B-': { give: ['B+', 'B-', 'AB+', 'AB-'], take: ['B-', 'O-'] },
+      'AB-': { give: ['AB+', 'AB-'], take: ['AB-', 'A-', 'B-', 'O-'] },
+    };
+
+    function selectBloodType(type) {
+      const data = compatibility[type];
+      document.getElementById('takeFrom').textContent = Array.isArray(data.take) ? data.take.join(', ') : data.take;
+      document.getElementById('giveTo').textContent = Array.isArray(data.give) ? data.give.join(', ') : data.give;
+    }
+  </script>
+
+</body>
+</html>

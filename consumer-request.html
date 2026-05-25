@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consumer Request - RedDropConnect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #fff;
+      color: #a30000;
+    }
+
+    header {
+      background: #a30000;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 1px 1px #000;
+    }
+
+    .container {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .donor-info {
+      margin-bottom: 30px;
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(163, 0, 0, 0.05);
+    }
+
+    .donor-info h4 {
+      margin-bottom: 10px;
+      color: #a30000;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #ffcccc;
+      padding-bottom: 5px;
+    }
+
+    .donor-info p {
+      margin: 8px 0;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .btn-box {
+      background: #fff0f0;
+      border: 1px solid #ffcccc;
+      padding: 30px;
+      width: 250px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(163, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-box:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-box img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+
+    .btn-box h3 {
+      font-size: 1.2rem;
+      color: #a30000;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 10px;
+      color: #a30000;
+      background: #fff0f0;
+      border-top: 1px solid #ffcccc;
+    }
+  </style>
+</head>
+<body>
+
+  <header>RedDropConnect - Consumer Request</header>
+
+  <div class="container">
+    <div class="title">Selected Donor Details</div>
+
+    <!-- Donor Details on Top -->
+    <div class="donor-info" id="donorInfo">
+      <!-- Donor details will be shown here -->
+    </div>
+
+    <div class="title">Manage Donor Requests</div>
+
+    <!-- Donor Accepted / Rejected Buttons -->
+    <div class="button-group">
+      <div class="btn-box" onclick="handleAccepted()">
+        <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Accepted Icon" />
+        <h3>Donor Accepted</h3>
+      </div>
+
+      <div class="btn-box" onclick="handleRejected()">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Rejected Icon" />
+        <h3>Donor Rejected</h3>
+      </div>
+    </div>
+  </div>
+
+  <footer>&copy; 2025 RedDropConnect | All rights reserved</footer>
+
+  <script>
+  function handleAccepted() {
+    alert("✅ Donor request marked as Accepted.");
+  }
+
+  function handleRejected() {
+    alert("❌ Donor request marked as Rejected.");
+  }
+
+  // Extract donor name from URL query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const donorName = urlParams.get('donor');
+
+  // Sample donor list (must match the list in the consumer page)
+  const donors = [
+    { name: 'Ravi Kumar', blood: 'O+', location: 'Chennai', phone: '9876543210' },
+    { name: 'Anita Sharma', blood: 'A+', location: 'Madurai', phone: '9845012345' },
+    { name: 'Farook FK', blood: 'O+', location: 'Madurai', phone: '9998887776' },
+    { name: 'Priya Das', blood: 'B+', location: 'Trichy', phone: '9787654321' }
+  ];
+
+  const infoContainer = document.getElementById('donorInfo');
+
+  if (donorName) {
+    const decodedName = decodeURIComponent(donorName).toLowerCase(); // Make case-insensitive
+    const donor = donors.find(d => d.name.toLowerCase() === decodedName);
+
+    if (donor) {
+      infoContainer.innerHTML = `
+        <h4>Donor Information</h4>
+        <p><strong>Name:</strong> ${donor.name}</p>
+        <p><strong>Blood Group:</strong> ${donor.blood}</p>
+        <p><strong>Location:</strong> ${donor.location}</p>
+        <p><strong>Phone Number:</strong> ${donor.phone}</p>
+      `;
+    } else {
+      infoContainer.innerHTML = `<p style="color:red;">❌ No donor details found.</p>`;
+    }
+  } else {
+    infoContainer.innerHTML = `<p style="color:orange;">⚠️ No donor selected.</p>`;
+  }
+</script>
+
+</body>
+</html>
